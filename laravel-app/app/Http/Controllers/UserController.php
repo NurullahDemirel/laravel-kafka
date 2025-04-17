@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Kafka\Producer\UserCreateProduce;
+use App\Kafka\Producer\UserCreated\InsertAddress;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -23,11 +24,21 @@ class UserController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'email' => 'required|unique:users',
+            'email' => 'required',
             'password' => 'required|string',
+            'address' => 'required|string',
         ]);
 
-        app(UserCreateProduce::class)->produce('user-created',json_encode($request->all()));
+
+        $user = User::query()->updateOrCreate(
+            ['email' => $request->string('email')],
+            $request->only('name', 'email', 'password')
+        );
+        app(InsertAddress::class)->produce('user-created', json_encode([
+            'address' => $request->string('address'),
+            'email' => $request->string('email'),
+            'user_id' => $user->id
+        ]));
 
         return response()->json([
             'user' => $request->all()

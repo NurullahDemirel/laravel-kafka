@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Kafka\Producer;
+namespace App\Kafka\Producer\UserCreated;
 
 use RdKafka\Producer;
 
-class UserCreateProduce
+class SendEmail
 {
     protected Producer $producer;
 

@@ -19,6 +19,7 @@ RUN apt-get update && apt-get install -y \
 # Supervisord config
 COPY supervisor/supervisord.conf /etc/supervisord.conf
 COPY supervisor/user-created-worker.conf /etc/supervisor/conf.d/user-created-worker.conf
+COPY supervisor/new-user-email-worker.conf /etc/supervisor/conf.d/new-user-email-worker.conf
 
 # Supervisor config klasörü oluştur
 RUN mkdir -p /etc/supervisor/conf.d
