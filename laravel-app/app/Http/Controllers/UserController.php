@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Kafka\Producer\UserCreated\InsertAddress;
+use App\Mail\Welcome;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {

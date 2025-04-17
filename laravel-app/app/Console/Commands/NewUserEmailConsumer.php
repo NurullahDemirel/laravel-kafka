@@ -3,8 +3,10 @@
 namespace App\Console\Commands;
 
 use App\Kafka\Producer\UserCreated\SendEmail;
+use App\Mail\Welcome;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use RdKafka\Conf;
 use RdKafka\KafkaConsumer;
 use RdKafka\Message;
@@ -54,8 +56,8 @@ class NewUserEmailConsumer extends Command
             $this->error('Invalid JSON message');
             return;
         }
-
         Log::info('sent email for  : ' . ($payload['email'] ?? ''));
+        Mail::to($payload['email'])->send(new Welcome($payload['email']));
 
     }
 }
