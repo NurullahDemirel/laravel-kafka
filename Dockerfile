@@ -18,11 +18,15 @@ RUN apt-get update && apt-get install -y \
 
 # Supervisord config
 COPY supervisor/supervisord.conf /etc/supervisord.conf
+COPY supervisor/user-created-worker.conf /etc/supervisor/conf.d/user-created-worker.conf
+
+# Supervisor config klasörü oluştur
+RUN mkdir -p /etc/supervisor/conf.d
+
 RUN mkdir -p /var/log/supervisor
 
 WORKDIR /var/www
 EXPOSE 9000
-
 
 CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisord.conf"]
 # Define the entry point

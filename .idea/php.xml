@@ -131,6 +131,11 @@
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.2" />
+  <component name="PhpRuntimeConfiguration">
+    <extensions>
+      <extension name="rdkafka" enabled="true" />
+    </extensions>
+  </component>
   <component name="PhpStanOptionsConfiguration">
     <option name="transferred" value="true" />
   </component>
