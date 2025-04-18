@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Kafka\Producer\UserCreated\InsertAddress;
-use App\Mail\Welcome;
+use App\Kafka\Producer\UserCreated;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
@@ -36,7 +34,7 @@ class UserController extends Controller
             ['email' => $request->string('email')],
             $request->only('name', 'email', 'password')
         );
-        app(InsertAddress::class)->produce('user-created', json_encode([
+        app(UserCreated::class)->produce('user-created', json_encode([
             'address' => $request->string('address'),
             'email' => $request->string('email'),
             'user_id' => $user->id

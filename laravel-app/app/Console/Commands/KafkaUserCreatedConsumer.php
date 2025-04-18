@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Kafka\Producer\UserCreated\SendEmail;
 use App\Models\Address;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
@@ -15,7 +14,7 @@ class KafkaUserCreatedConsumer extends Command
     protected $signature = 'kafka:consume-user-created';
     protected $description = 'Consume user-created messages from Kafka';
 
-    public function handle(SendEmail $sendEmail)
+    public function handle()
     {
         $conf = new Conf();
         $conf->set('metadata.broker.list', env('KAFKA_BROKER', 'kafka:9092'));
@@ -32,7 +31,7 @@ class KafkaUserCreatedConsumer extends Command
 
             switch ($message->err) {
                 case RD_KAFKA_RESP_ERR_NO_ERROR:
-                    $this->handleMessage($message, $sendEmail);
+                    $this->handleMessage($message);
                     break;
                 case RD_KAFKA_RESP_ERR__PARTITION_EOF:
                     $this->warn("No more messages.");
@@ -47,7 +46,7 @@ class KafkaUserCreatedConsumer extends Command
         }
     }
 
-    protected function handleMessage(Message $message, SendEmail $sendEmail)
+    protected function handleMessage(Message $message)
     {
         $payload = json_decode($message->payload, true);
 
@@ -56,15 +55,12 @@ class KafkaUserCreatedConsumer extends Command
             return;
         }
 
+        Log::info('new user :' . json_encode($payload));
+
         Address::create([
             'user_id' => $payload['user_id'],
             'address' => $payload['address'],
         ]);
-
-        $sendEmail->produce('new_user_email', json_encode([
-            'email' => $payload['email'] ?? '',
-            'user_id' => $payload['user_id'] ?? '',
-        ]));
 
     }
 }

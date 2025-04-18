@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Kafka\Producer\UserCreated\SendEmail;
 use App\Mail\Welcome;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
@@ -20,13 +19,13 @@ class NewUserEmailConsumer extends Command
     {
         $conf = new Conf();
         $conf->set('metadata.broker.list', env('KAFKA_BROKER', 'kafka:9092'));
-        $conf->set('group.id', 'laravel-user-group');
+        $conf->set('group.id', 'email-user-group');
         $conf->set('auto.offset.reset', 'earliest');
 
         $consumer = new KafkaConsumer($conf);
-        $consumer->subscribe(['new_user_email']);
+        $consumer->subscribe(['user-created']);
 
-        $this->info("Listening to 'new_user_email' topic...");
+        $this->info("Listening to 'user-created' topic...");
 
         while (true) {
             $message = $consumer->consume(10000); // 10 saniye

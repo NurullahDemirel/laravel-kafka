@@ -71,5 +71,15 @@ Emails
 ![Emails](Screenshoots/result1.png)
 
 
+Notes :
+Her consumer kendi group.id ile farklı bir mesaj kuyruğu gibi davranır.
+
+Aynı group id verilirse sadece biri alır.
+
+consumeStart(0, RD_KAFKA_OFFSET_END) sadece yeni mesajları dinler.
+
+Supervisor ya da Docker entrypoint ile bu scriptleri kalıcı hale getirebilirsin.
+
+
 
 
