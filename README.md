@@ -1,7 +1,5 @@
 # Laravel Kafka App
-
-Kafka example app with laravel.
-
+Kafka sample application with Laravel.
 # Technologies
   - Php
   - Laravel 
